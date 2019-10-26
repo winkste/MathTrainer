@@ -11,15 +11,15 @@ import java.util.Random;
  *
  * @author stephan_wink
  */
-public class MinusOp extends MathOps
+public class PlusOp extends MathOps
 {
     
-    public MinusOp(int maxCorrTests)
+    public PlusOp(int maxCorrTests)
     {
         super(maxCorrTests);
     }
     
-    public MinusOp(int maxCorrTests, int firstMin, int firstMax, int secondMin, int secondMax)
+    public PlusOp(int maxCorrTests, int firstMin, int firstMax, int secondMin, int secondMax)
     {
         super(maxCorrTests);
     }
@@ -28,13 +28,13 @@ public class MinusOp extends MathOps
     {
         this.first = super.getRandomNumberInRange(super.firstMin, super.firstMax);
         this.second = super.getRandomNumberInRange(super.secondMin, super.secondMax);
-        this.result = first - second;
+        this.result = first + second;
         this.actualTest++;
     }
 
     
     public String getOperation()
     {
-        return(this.first + " - " + this.second + " = ");
+        return(this.first + " + " + this.second + " = ");
     }
 }

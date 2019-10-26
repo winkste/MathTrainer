@@ -7,9 +7,13 @@ package gui;
 
 
 import com.zetcode.snake.Snake;
+import com.zetcode.tetris.Tetris;
+import data.MathOps;
 import data.MinusOp;
+import data.PlusOp;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 
@@ -20,7 +24,8 @@ import javax.swing.SwingWorker;
 public class MqttStarter extends javax.swing.JFrame {
     
 
-    private MinusOp test;
+    private MathOps test;
+    private int testsToGame = 10;
 
 
     /**
@@ -34,7 +39,7 @@ public class MqttStarter extends javax.swing.JFrame {
 
     public MqttStarter(String hostname) {
         this();
-        this.setTitle("Matte Schlange");
+        this.setTitle("Mathe Trainer");
     }
 
     /**
@@ -124,6 +129,7 @@ public class MqttStarter extends javax.swing.JFrame {
 
         next_jb.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
         next_jb.setText(">");
+        next_jb.setEnabled(false);
         next_jb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 next_jbActionPerformed(evt);
@@ -174,16 +180,14 @@ public class MqttStarter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void minus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minus_jbActionPerformed
-
-        test = new MinusOp(10);
-        this.log_jta.append("minus challange gestartet\n");
-        startChallange();
-
+        test = new MinusOp(testsToGame);
+        startChallange("minus Test gestartet\n");
     }//GEN-LAST:event_minus_jbActionPerformed
 
     private void plus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plus_jbActionPerformed
 
-        this.log_jta.append("plus challange gestartet\n");
+        test = new PlusOp(testsToGame);
+        startChallange("plus Test gestartet\n");
     }//GEN-LAST:event_plus_jbActionPerformed
 
     private void mul_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mul_jbActionPerformed
@@ -202,14 +206,41 @@ public class MqttStarter extends javax.swing.JFrame {
     private void next_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_next_jbActionPerformed
         if(null != this.test)
         {
-            int result = Integer.getInteger(this.result_jtf.getText());
-            if(this.test.validateResult(result))
+            if(isNumeric(this.result_jtf.getText()))
             {
-                this.log_jta.append(this.formula_jtf.getText() + this.result_jtf + " R");
+                int result = Integer.parseInt(this.result_jtf.getText());
+                if(this.test.validateResult(result))
+                {
+                    this.log_jta.append(this.formula_jtf.getText() + this.result_jtf.getText() + " R\n");
+                }
+                else
+                {
+                    this.log_jta.append(this.formula_jtf.getText() + this.result_jtf.getText() + " F\n");
+                }
+            
+                if(this.test.isTestCycleCompleted())
+                {
+                    this.next_jb.setEnabled(false);
+                    enableTestStarts(true);
+                    JOptionPane.showMessageDialog(MqttStarter.this, "Gut gemacht!\n "
+                            + "Dafür gibt es jetzt zur Belohnung ein Spiel.\n "
+                            + "Mach dich bereit!");
+                    startTheGame();
+                    this.formula_jtf.setText("");
+                    this.result_jtf.setText("");
+
+                }
+                else
+                {
+                    this.test.calculateNextTest();
+                    this.formula_jtf.setText(this.test.getOperation());
+                    this.result_jtf.setText("");
+                    this.next_jb.setEnabled(true);
+                }
             }
             else
             {
-                this.log_jta.append(this.formula_jtf.getText() + this.result_jtf + " F");
+                this.log_jta.append(" Das war keine Zahl, versuche es noch einmal!\n");
             }
         }
         
@@ -243,28 +274,40 @@ public class MqttStarter extends javax.swing.JFrame {
     private void enableTestStarts(boolean enable) {
         this.minus_jb.setEnabled(enable);
         this.plus_jb.setEnabled(enable);
-        this.mul_jb.setEnabled(enable);
-        this.div_jb.setEnabled(enable);
+        //this.mul_jb.setEnabled(enable);
+        //this.div_jb.setEnabled(enable);
         
     }
 
-    private void challangeCompleted() 
+    private void startTheGame() 
     {
         EventQueue.invokeLater(() -> {
-            JFrame ex = new Snake();
+            JFrame ex = new Tetris();
             ex.setVisible(true);
         });
     }
 
-    private void startChallange() {
+    private void startChallange(String log) {
         
         if(null != test)
         {
+            this.log_jta.append(log);
             enableTestStarts(false);
             this.next_jb.setEnabled(true);
+            this.test.calculateNextTest();
             this.formula_jtf.setText(test.getOperation());
             this.result_jtf.setText("");
         }
+    }
+    
+    public static boolean isNumeric(String strNum) 
+    {
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
     }
     
     class DataCollector extends SwingWorker<Long, Object>
