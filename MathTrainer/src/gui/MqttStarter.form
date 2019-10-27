@@ -163,7 +163,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial Black" size="36" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="29 + 12 = "/>
+        <Property name="text" type="java.lang.String" value="XX + YY ="/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
@@ -173,7 +173,7 @@
           <Font name="Arial Black" size="36" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="11"/>
-        <Property name="text" type="java.lang.String" value="-999"/>
+        <Property name="text" type="java.lang.String" value="ZZZ"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="next_jb">

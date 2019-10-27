@@ -120,12 +120,12 @@ public class MqttStarter extends javax.swing.JFrame {
         jPanel1.add(div_jb);
 
         formula_jtf.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
-        formula_jtf.setText("29 + 12 = ");
+        formula_jtf.setText("XX + YY =");
         formula_jtf.setEnabled(false);
 
         result_jtf.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
         result_jtf.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
-        result_jtf.setText("-999");
+        result_jtf.setText("ZZZ");
 
         next_jb.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
         next_jb.setText(">");
