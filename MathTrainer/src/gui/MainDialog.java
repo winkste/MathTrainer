@@ -299,7 +299,7 @@ public class MainDialog extends javax.swing.JFrame {
     {
         log.trace("start the game");
         EventQueue.invokeLater(() -> {
-            JFrame ex = new Tetris();
+            JFrame ex = new Snake();
             ex.setVisible(true);
         });
     }
