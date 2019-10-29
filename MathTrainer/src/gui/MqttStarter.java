@@ -282,7 +282,7 @@ public class MqttStarter extends javax.swing.JFrame {
     private void startTheGame() 
     {
         EventQueue.invokeLater(() -> {
-            JFrame ex = new Tetris();
+            JFrame ex = new Snake();
             ex.setVisible(true);
         });
     }
