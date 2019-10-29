@@ -15,29 +15,31 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import settings.UserSettings;
 
 
 /**
  *
  * @author stephan_wink
  */
-public class MqttStarter extends javax.swing.JFrame {
+public class MainDialog extends javax.swing.JFrame {
     
 
     private MathOps test;
-    private int testsToGame = 10;
+    private UserSettings user;
 
 
     /**
      * Creates new form MqttStarter
      */
-    public MqttStarter() {
+    public MainDialog() {
 
+        user = new UserSettings("Lily", 10);
         initComponents();
 
     }
 
-    public MqttStarter(String hostname) {
+    public MainDialog(String hostname) {
         this();
         this.setTitle("Mathe Trainer");
     }
@@ -180,13 +182,13 @@ public class MqttStarter extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void minus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minus_jbActionPerformed
-        test = new MinusOp(testsToGame);
+        test = new MinusOp(user.getTestsToGameCount());
         startChallange("minus Test gestartet\n");
     }//GEN-LAST:event_minus_jbActionPerformed
 
     private void plus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plus_jbActionPerformed
 
-        test = new PlusOp(testsToGame);
+        test = new PlusOp(user.getTestsToGameCount());
         startChallange("plus Test gestartet\n");
     }//GEN-LAST:event_plus_jbActionPerformed
 
@@ -222,7 +224,7 @@ public class MqttStarter extends javax.swing.JFrame {
                 {
                     this.next_jb.setEnabled(false);
                     enableTestStarts(true);
-                    JOptionPane.showMessageDialog(MqttStarter.this, "Gut gemacht!\n "
+                    JOptionPane.showMessageDialog(MainDialog.this, "Gut gemacht!\n "
                             + "Dafür gibt es jetzt zur Belohnung ein Spiel.\n "
                             + "Mach dich bereit!");
                     startTheGame();
@@ -252,7 +254,7 @@ public class MqttStarter extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                MqttStarter.this.setVisible(true);
+                MainDialog.this.setVisible(true);
             }
         });
     }

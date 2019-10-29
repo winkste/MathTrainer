@@ -29,4 +29,30 @@ public class UserSettings
         mult = new TestSettings();
         divi = new TestSettings();  
     }  
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getTestsToGameCount() {
+        return testsToGameCount;
+    }
+
+    public TestSettings getSubs() {
+        return subs;
+    }
+
+    public TestSettings getAddi() {
+        return addi;
+    }
+
+    public TestSettings getMult() {
+        return mult;
+    }
+
+    public TestSettings getDivi() {
+        return divi;
+    }
+    
+    
 }

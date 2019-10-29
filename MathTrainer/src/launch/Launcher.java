@@ -5,19 +5,31 @@
  */
 package launch;
 
-import gui.MqttStarter;
+import gui.MainDialog;
 
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 
 /**
  *
  * @author stephan_wink
  */
+
+// TODO: add log4j for generic logging
+// TODO: add user statistic handling
+// TODO: load user statistic from file
+// TODO: do we need a configuration dialog for the user settings?
+// TODO: Add different user handling and selection at start (dialog with combo box)
+// TODO: if next is pressed, focus back to the data entry field
+// TODO: tetris should be slower
+
 public class Launcher 
 {
+    private final static Logger log = LogManager.getLogger(Launcher.class);
+
+            
 
     /**
      * @param args the command line arguments
@@ -45,8 +57,22 @@ public class Launcher
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MqttStarter.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        /* Create and display the form */
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+        tracer.setVisible(true);
+        }
+        });*/
+        //</editor-fold>
+        
+        /* Create and display the form */
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                tracer.setVisible(true);
+            }
         //</editor-fold>
         /* Create and display the form */
         /*java.awt.EventQueue.invokeLater(new Runnable() {
@@ -63,9 +89,12 @@ public class Launcher
             }
         });*/
         
+        log.info("starting...");
+        log.error("this is an error");
+        log.warn("this is a warning");
         
-       MqttStarter start = new MqttStarter();
-       start.Start();
+        MainDialog start = new MainDialog();
+        start.Start();
     }
     
 }
