@@ -15,6 +15,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import launch.Launcher;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import settings.UserSettings;
 
 
@@ -24,9 +27,9 @@ import settings.UserSettings;
  */
 public class MainDialog extends javax.swing.JFrame {
     
-
     private MathOps test;
     private UserSettings user;
+    private final static Logger log = LogManager.getLogger(Launcher.class);
 
 
     /**
@@ -182,43 +185,51 @@ public class MainDialog extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void minus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minus_jbActionPerformed
+        log.trace("button minus pressed");
         test = new MinusOp(user.getTestsToGameCount());
         startChallange("minus Test gestartet\n");
     }//GEN-LAST:event_minus_jbActionPerformed
 
     private void plus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plus_jbActionPerformed
-
+        log.trace("button plus pressed");
         test = new PlusOp(user.getTestsToGameCount());
         startChallange("plus Test gestartet\n");
     }//GEN-LAST:event_plus_jbActionPerformed
 
     private void mul_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mul_jbActionPerformed
-
+        log.trace("button mul pressed");
         this.log_jta.append("mal challange gestartet\n");
     }//GEN-LAST:event_mul_jbActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
+        log.trace("window closing event");
     }//GEN-LAST:event_formWindowClosing
 
     private void div_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_div_jbActionPerformed
+        log.trace("button div pressed");
         this.log_jta.append("teilen challange gestartet\n");
     }//GEN-LAST:event_div_jbActionPerformed
 
     private void next_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_next_jbActionPerformed
+        log.trace("button next pressed");
         if(null != this.test)
         {
             if(isNumeric(this.result_jtf.getText()))
             {
                 int result = Integer.parseInt(this.result_jtf.getText());
+                String textCommon = this.test.getActualTests() + "/" 
+                                        + this.test.getMaxCorrTests() 
+                                        + ": " + this.formula_jtf.getText() 
+                                        + this.result_jtf.getText();
                 if(this.test.validateResult(result))
                 {
-                    this.log_jta.append(this.formula_jtf.getText() + this.result_jtf.getText() + " R\n");
+                    textCommon += " R\n";
                 }
                 else
                 {
-                    this.log_jta.append(this.formula_jtf.getText() + this.result_jtf.getText() + " F\n");
+                    textCommon += " F\n";
                 }
+                this.log_jta.append(textCommon);
             
                 if(this.test.isTestCycleCompleted())
                 {
@@ -230,7 +241,7 @@ public class MainDialog extends javax.swing.JFrame {
                     startTheGame();
                     this.formula_jtf.setText("");
                     this.result_jtf.setText("");
-
+                    log.trace("test completed");
                 }
                 else
                 {
@@ -238,11 +249,13 @@ public class MainDialog extends javax.swing.JFrame {
                     this.formula_jtf.setText(this.test.getOperation());
                     this.result_jtf.setText("");
                     this.next_jb.setEnabled(true);
+                    this.result_jtf.requestFocus();
                 }
             }
             else
             {
                 this.log_jta.append(" Das war keine Zahl, versuche es noch einmal!\n");
+                log.trace("non decimal entry detected");
             }
         }
         
@@ -251,6 +264,7 @@ public class MainDialog extends javax.swing.JFrame {
 
     public void Start()
     {
+        log.trace("start request");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -283,6 +297,7 @@ public class MainDialog extends javax.swing.JFrame {
 
     private void startTheGame() 
     {
+        log.trace("start the game");
         EventQueue.invokeLater(() -> {
             JFrame ex = new Tetris();
             ex.setVisible(true);

@@ -73,7 +73,6 @@ public abstract class MathOps
     
     public boolean validateResult(int result)
     {
-        System.out.println(this.result == result);
         return(this.result == result);
     }
     
@@ -94,6 +93,18 @@ public abstract class MathOps
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+
+    public int getActualTests() 
+    {
+        return actualTest;
+    }
+
+    public int getMaxCorrTests() 
+    {
+        return maxCorrTests;
+    }
+    
+    
     
     public abstract void calculateNextTest();
     public abstract String getOperation();

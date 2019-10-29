@@ -17,12 +17,10 @@ import org.apache.logging.log4j.Logger;
  * @author stephan_wink
  */
 
-// TODO: add log4j for generic logging
 // TODO: add user statistic handling
 // TODO: load user statistic from file
 // TODO: do we need a configuration dialog for the user settings?
 // TODO: Add different user handling and selection at start (dialog with combo box)
-// TODO: if next is pressed, focus back to the data entry field
 // TODO: tetris should be slower
 
 public class Launcher 
@@ -89,9 +87,7 @@ public class Launcher
             }
         });*/
         
-        log.info("starting...");
-        log.error("this is an error");
-        log.warn("this is a warning");
+        log.trace("started...");
         
         MainDialog start = new MainDialog();
         start.Start();

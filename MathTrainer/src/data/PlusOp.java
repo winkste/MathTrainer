@@ -24,6 +24,7 @@ public class PlusOp extends MathOps
         super(maxCorrTests);
     }
     
+    @Override
     public void calculateNextTest()
     {
         this.first = super.getRandomNumberInRange(super.firstMin, super.firstMax);
@@ -33,6 +34,7 @@ public class PlusOp extends MathOps
     }
 
     
+    @Override
     public String getOperation()
     {
         return(this.first + " + " + this.second + " = ");
