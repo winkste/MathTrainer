@@ -13,8 +13,16 @@
   </Appenders>
   <Loggers>
     <Root level="TRACE">
-      <AppenderRef ref="FILE" level="TRACE"/>
-      <AppenderRef ref="STDOUT" level="TRACE"/>
+      <AppenderRef ref="FILE" level="ERROR"/>
+      <AppenderRef ref="STDOUT" level="ERROR"/>
     </Root>
+    <logger name="gui.MainDialog">
+        <AppenderRef ref="FILE" level="TRACE"/>
+        <AppenderRef ref="STDOUT" level="TRACE"/>
+    </logger>
+    <logger name="gui.UserSettings">
+        <AppenderRef ref="FILE" level="TRACE"/>
+        <AppenderRef ref="STDOUT" level="TRACE"/>
+    </logger>
   </Loggers>
 </Configuration>

@@ -5,7 +5,7 @@
  */
 package data;
 
-import java.util.Random;
+import settings.TestSettings;
 
 /**
  *
@@ -14,21 +14,23 @@ import java.util.Random;
 public class PlusOp extends MathOps
 {
     
-    public PlusOp(int maxCorrTests)
+    public PlusOp(int tests, int allowedFailures)
     {
-        super(maxCorrTests);
+        super(tests, allowedFailures);
     }
     
-    public PlusOp(int maxCorrTests, int firstMin, int firstMax, int secondMin, int secondMax)
+    public PlusOp(int tests, int allowedFailures, TestSettings settings)
     {
-        super(maxCorrTests);
+        super(tests, allowedFailures, settings);
     }
     
     @Override
     public void calculateNextTest()
     {
-        this.first = super.getRandomNumberInRange(super.firstMin, super.firstMax);
-        this.second = super.getRandomNumberInRange(super.secondMin, super.secondMax);
+        this.first = super.getRandomNumberInRange(super.settings.getFirstMin(), 
+                                                  super.settings.getFirstMax());
+        this.second = super.getRandomNumberInRange(super.settings.getSecondMin(), 
+                                                  super.settings.getSecondMax());
         this.result = first + second;
         this.actualTest++;
     }

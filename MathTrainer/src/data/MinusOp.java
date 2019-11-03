@@ -5,7 +5,7 @@
  */
 package data;
 
-import java.util.Random;
+import settings.TestSettings;
 
 /**
  *
@@ -14,20 +14,29 @@ import java.util.Random;
 public class MinusOp extends MathOps
 {
     
-    public MinusOp(int maxCorrTests)
+    public MinusOp(int tests, int allowedFailures)
     {
-        super(maxCorrTests);
+        super(tests, allowedFailures);
     }
     
-    public MinusOp(int maxCorrTests, int firstMin, int firstMax, int secondMin, int secondMax)
+    public MinusOp(int tests, int allowedFailures, TestSettings settings)
     {
-        super(maxCorrTests);
+        super(tests, allowedFailures, settings);
     }
     
     public void calculateNextTest()
     {
-        this.first = super.getRandomNumberInRange(super.firstMin, super.firstMax);
-        this.second = super.getRandomNumberInRange(super.secondMin, super.secondMax);
+        int localFirst;
+        int localSecond;
+        
+        localFirst = super.getRandomNumberInRange(super.settings.getFirstMin(), 
+                                                  super.settings.getFirstMax());
+        localSecond = super.getRandomNumberInRange(super.settings.getSecondMin(), 
+                                                  super.settings.getSecondMax());
+        
+        this.first = Math.max(localFirst, localSecond);
+        this.second = Math.min(localFirst, localSecond);
+               
         this.result = first - second;
         this.actualTest++;
     }

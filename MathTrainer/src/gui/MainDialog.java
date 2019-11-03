@@ -12,13 +12,14 @@ import data.MathOps;
 import data.MinusOp;
 import data.PlusOp;
 import java.awt.EventQueue;
+import java.util.List;
+import java.util.ListIterator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
-import launch.Launcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import settings.UserSettings;
+import settings.UserSets;
 
 
 /**
@@ -28,8 +29,8 @@ import settings.UserSettings;
 public class MainDialog extends javax.swing.JFrame {
     
     private MathOps test;
-    private UserSettings user;
-    private final static Logger log = LogManager.getLogger(Launcher.class);
+    private List<UserSets> user;
+    private final static Logger log = LogManager.getLogger(MainDialog.class);
 
 
     /**
@@ -37,14 +38,17 @@ public class MainDialog extends javax.swing.JFrame {
      */
     public MainDialog() {
 
-        user = new UserSettings("Lily", 10);
+        this.user = UserSets.LoadUserSettingsFromFile();
         initComponents();
-
-    }
-
-    public MainDialog(String hostname) {
-        this();
         this.setTitle("Mathe Trainer");
+        
+        this.users_jcb.setSelectedIndex(0);
+        this.users_jcb.removeAllItems();
+        ListIterator<UserSets> iter = this.user.listIterator();
+        while(iter.hasNext())
+        {
+            this.users_jcb.addItem(iter.next().getUserName());
+        }
     }
 
     /**
@@ -67,6 +71,10 @@ public class MainDialog extends javax.swing.JFrame {
         formula_jtf = new javax.swing.JTextField();
         result_jtf = new javax.swing.JTextField();
         next_jb = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        users_jcb = new javax.swing.JComboBox<>();
+        setup_jb = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -131,6 +139,11 @@ public class MainDialog extends javax.swing.JFrame {
         result_jtf.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
         result_jtf.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         result_jtf.setText("ZZZ");
+        result_jtf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                result_jtfKeyPressed(evt);
+            }
+        });
 
         next_jb.setFont(new java.awt.Font("Arial Black", 1, 36)); // NOI18N
         next_jb.setText(">");
@@ -141,6 +154,22 @@ public class MainDialog extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.setLayout(new java.awt.GridLayout());
+
+        jLabel2.setText("Spieler:");
+        jPanel2.add(jLabel2);
+
+        users_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(users_jcb);
+
+        setup_jb.setText("setup");
+        setup_jb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setup_jbActionPerformed(evt);
+            }
+        });
+        jPanel2.add(setup_jb);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,32 +179,35 @@ public class MainDialog extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(formula_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(result_jtf)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(next_jb, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(formula_jtf, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(result_jtf, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(next_jb, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(formula_jtf, javax.swing.GroupLayout.DEFAULT_SIZE, 79, Short.MAX_VALUE)
-                    .addComponent(result_jtf, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(next_jb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(formula_jtf, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                    .addComponent(next_jb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(result_jtf))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -186,13 +218,17 @@ public class MainDialog extends javax.swing.JFrame {
 
     private void minus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minus_jbActionPerformed
         log.trace("button minus pressed");
-        test = new MinusOp(user.getTestsToGameCount());
+        UserSets local = this.user.get(this.users_jcb.getSelectedIndex());
+        test = new MinusOp(local.getTests(), local.getFailures(), 
+                            local.getSubstractionTestSet());
         startChallange("minus Test gestartet\n");
     }//GEN-LAST:event_minus_jbActionPerformed
 
     private void plus_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_plus_jbActionPerformed
         log.trace("button plus pressed");
-        test = new PlusOp(user.getTestsToGameCount());
+        UserSets local = this.user.get(this.users_jcb.getSelectedIndex());
+        test = new PlusOp(local.getTests(), local.getFailures(), 
+                            local.getSubstractionTestSet());
         startChallange("plus Test gestartet\n");
     }//GEN-LAST:event_plus_jbActionPerformed
 
@@ -212,54 +248,29 @@ public class MainDialog extends javax.swing.JFrame {
 
     private void next_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_next_jbActionPerformed
         log.trace("button next pressed");
-        if(null != this.test)
-        {
-            if(isNumeric(this.result_jtf.getText()))
-            {
-                int result = Integer.parseInt(this.result_jtf.getText());
-                String textCommon = this.test.getActualTests() + "/" 
-                                        + this.test.getMaxCorrTests() 
-                                        + ": " + this.formula_jtf.getText() 
-                                        + this.result_jtf.getText();
-                if(this.test.validateResult(result))
-                {
-                    textCommon += " R\n";
-                }
-                else
-                {
-                    textCommon += " F\n";
-                }
-                this.log_jta.append(textCommon);
-            
-                if(this.test.isTestCycleCompleted())
-                {
-                    this.next_jb.setEnabled(false);
-                    enableTestStarts(true);
-                    JOptionPane.showMessageDialog(MainDialog.this, "Gut gemacht!\n "
-                            + "Dafür gibt es jetzt zur Belohnung ein Spiel.\n "
-                            + "Mach dich bereit!");
-                    startTheGame();
-                    this.formula_jtf.setText("");
-                    this.result_jtf.setText("");
-                    log.trace("test completed");
-                }
-                else
-                {
-                    this.test.calculateNextTest();
-                    this.formula_jtf.setText(this.test.getOperation());
-                    this.result_jtf.setText("");
-                    this.next_jb.setEnabled(true);
-                    this.result_jtf.requestFocus();
-                }
-            }
-            else
-            {
-                this.log_jta.append(" Das war keine Zahl, versuche es noch einmal!\n");
-                log.trace("non decimal entry detected");
-            }
-        }
+        AnalyzeUserInput();
         
     }//GEN-LAST:event_next_jbActionPerformed
+
+    private void result_jtfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_result_jtfKeyPressed
+        if(10 == evt.getKeyCode())
+        {
+            log.trace("user pressed enter");
+            AnalyzeUserInput();
+        }
+    }//GEN-LAST:event_result_jtfKeyPressed
+
+    private void setup_jbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setup_jbActionPerformed
+        log.trace("entering setup dialog");
+        UserSettings userSetDialog = new UserSettings(this, true);
+        userSetDialog.setUserSettings(this.user, this.users_jcb.getSelectedIndex());
+        userSetDialog.setVisible(true);
+        if(UserSettings.OK == userSetDialog.GetDialogResult())
+        {
+            this.user = userSetDialog.getUserSettings();
+            log.trace("user data updated");
+        }
+    }//GEN-LAST:event_setup_jbActionPerformed
 
 
     public void Start()
@@ -277,7 +288,9 @@ public class MainDialog extends javax.swing.JFrame {
     private javax.swing.JButton div_jb;
     private javax.swing.JTextField formula_jtf;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea log_jta;
     private javax.swing.JButton minus_jb;
@@ -285,11 +298,15 @@ public class MainDialog extends javax.swing.JFrame {
     private javax.swing.JButton next_jb;
     private javax.swing.JButton plus_jb;
     private javax.swing.JTextField result_jtf;
+    private javax.swing.JButton setup_jb;
+    private javax.swing.JComboBox<String> users_jcb;
     // End of variables declaration//GEN-END:variables
 
     private void enableTestStarts(boolean enable) {
         this.minus_jb.setEnabled(enable);
         this.plus_jb.setEnabled(enable);
+        this.users_jcb.setEnabled(enable);
+        this.setup_jb.setEnabled(enable);
         //this.mul_jb.setEnabled(enable);
         //this.div_jb.setEnabled(enable);
         
@@ -297,11 +314,27 @@ public class MainDialog extends javax.swing.JFrame {
 
     private void startTheGame() 
     {
-        log.trace("start the game");
-        EventQueue.invokeLater(() -> {
-            JFrame ex = new Snake();
-            ex.setVisible(true);
-        });
+        switch (this.user.get(this.users_jcb.getSelectedIndex()).getIndexToGameLookup()) 
+        {
+            case 0:
+                log.trace("start the game: Snake");
+                EventQueue.invokeLater(() -> {
+                    JFrame ex = new Snake();
+                    ex.setVisible(true);
+                });     break;
+            case 1:
+                log.trace("start the game: Tetris");
+                EventQueue.invokeLater(() -> {
+                    JFrame ex = new Tetris();
+                    ex.setVisible(true);
+                });     break;
+            default:
+                log.trace("start the default game: Snake");
+                EventQueue.invokeLater(() -> {
+                    JFrame ex = new Snake();
+                    ex.setVisible(true);
+                });     break;
+        }
     }
 
     private void startChallange(String log) {
@@ -325,6 +358,66 @@ public class MainDialog extends javax.swing.JFrame {
             return false;
         }
         return true;
+    }
+
+    private void AnalyzeUserInput() 
+    {
+        if(null != this.test)
+        {
+            if(isNumeric(this.result_jtf.getText()))
+            {
+                int result = Integer.parseInt(this.result_jtf.getText());
+                String textCommon = this.test.getActualTests() + "/" 
+                                        + this.test.getTests()
+                                        + ": " + this.formula_jtf.getText() 
+                                        + this.result_jtf.getText();
+                if(this.test.validateResult(result))
+                {
+                    textCommon += " R\n";
+                }
+                else
+                {
+                    textCommon += " F\n";
+                }
+                this.log_jta.append(textCommon);
+                log.trace(textCommon);
+            
+                if(this.test.isTestCycleCompleted())
+                {
+                    this.next_jb.setEnabled(false);
+                    enableTestStarts(true);
+                    if(this.test.isTestCyclePassed())
+                    {
+                        JOptionPane.showMessageDialog(MainDialog.this, "Gut gemacht!\n "
+                            + "Dafür gibt es jetzt zur Belohnung ein Spiel.\n "
+                            + "Mach dich bereit!");
+                        startTheGame();
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(MainDialog.this, "Schade!\n "
+                            + "Du hast leider zu viele Fehler gemacht..\n "
+                            + "Versuche es gleich noch einmal.");   
+                    }
+                    this.formula_jtf.setText("");
+                    this.result_jtf.setText("");
+                    log.trace("test completed");
+                }
+                else
+                {
+                    this.test.calculateNextTest();
+                    this.formula_jtf.setText(this.test.getOperation());
+                    this.result_jtf.setText("");
+                    this.next_jb.setEnabled(true);
+                    this.result_jtf.requestFocus();
+                }
+            }
+            else
+            {
+                this.log_jta.append(" Das war keine Zahl, versuche es noch einmal!\n");
+                log.trace("non decimal entry detected");
+            }
+        }
     }
     
     class DataCollector extends SwingWorker<Long, Object>

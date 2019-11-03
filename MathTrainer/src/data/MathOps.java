@@ -16,6 +16,7 @@ package data;
  */
 
 import java.util.Random;
+import settings.TestSettings;
 
 /**
  *
@@ -26,36 +27,33 @@ public abstract class MathOps
     protected int first;
     protected int second;
     protected int result;
+    
+    protected int tests;
     protected int correctTests;
-    protected int maxCorrTests;
+    protected int allowedFailures;
     protected int actualTest;
-    protected int firstMin;
-    protected int firstMax;
-    protected int secondMin;
-    protected int secondMax;
+    
+    protected TestSettings settings;
     
     
-    public MathOps(int maxCorrTests)
+    public MathOps(int tests, int allowedFailures)
     {
         this.first = 0;
         this.second = 0;
         this.result = 0;
+        
+        this.tests = tests;
         this.correctTests = 0;
-        this.maxCorrTests = maxCorrTests;
+        this.allowedFailures = allowedFailures;
         this.actualTest = 0;
-        this.firstMin = 10;
-        this.firstMax = 20;
-        this.secondMin = 0;
-        this.secondMax = 10;       
+        
+        this.settings = new TestSettings();      
     }
     
-    public MathOps(int maxCorrTests, int firstMin, int firstMax, int secondMin, int secondMax)
+    public MathOps(int tests, int allowedFailures, TestSettings settings)
     {
-        this(maxCorrTests);
-        this.firstMin = firstMin;
-        this.firstMax = firstMax;
-        this.secondMin = secondMin;
-        this.secondMax = secondMax;
+        this(tests, allowedFailures);
+        this.settings = settings;
     }
 
     public int getFirst() {
@@ -73,12 +71,26 @@ public abstract class MathOps
     
     public boolean validateResult(int result)
     {
-        return(this.result == result);
+        
+        if(this.result == result)
+        {
+            this.correctTests++;
+            return(true);
+        }
+        else
+        {
+            return(false);
+        }
     }
     
     public boolean isTestCycleCompleted()
     {
-        return(this.actualTest >= this.maxCorrTests);
+        return(this.actualTest >= this.tests);
+    }
+    
+    public boolean isTestCyclePassed()
+    {
+        return((this.tests - this.correctTests) <= this.allowedFailures);
     }
     
     
@@ -96,12 +108,12 @@ public abstract class MathOps
 
     public int getActualTests() 
     {
-        return actualTest;
+        return(this.actualTest);
     }
 
-    public int getMaxCorrTests() 
+    public int getTests() 
     {
-        return maxCorrTests;
+        return(this.tests);
     }
     
     

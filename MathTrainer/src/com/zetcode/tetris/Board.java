@@ -337,13 +337,14 @@ public class Board extends JPanel {
                     tryMove(curPiece, curX + 1, curY);
                     break;
                 case KeyEvent.VK_DOWN:
-                    tryMove(curPiece.rotateRight(), curX, curY);
+                    //tryMove(curPiece.rotateRight(), curX, curY);
+                    dropDown();
                     break;
                 case KeyEvent.VK_UP:
                     tryMove(curPiece.rotateLeft(), curX, curY);
                     break;
                 case KeyEvent.VK_SPACE:
-                    dropDown();
+                    //dropDown();
                     break;
                 case KeyEvent.VK_D:
                     oneLineDown();
